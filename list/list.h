@@ -25,8 +25,35 @@ namespace ipm {
                 return T{};
             T value = head_->value_;
             Node* temp = head_;
-            head_ = head_->next;
+            head_ = head_->next_;
             delete temp;
+            size_--;
+            return value;
+        }
+
+        void push_back(T value) {
+            if(head_ == nullptr) {
+                push_front(value);
+                return;
+            }
+            Node* temp = head_;
+            while(temp->next_ != nullptr)
+                temp = temp->next_;
+            temp->next_ = new Node(value);
+        }
+
+        T pop_back() {
+            if(head_ == nullptr) {
+                return T{};
+            }
+            if(head_->next_ == nullptr)
+                return pop_front();
+            Node* temp = head_;
+            while(temp->next_->next_ != nullptr)
+                temp = temp->next_;
+            T value = temp->next_->value_;
+            delete temp->next_;
+            temp->next_ = nullptr;
             size_--;
             return value;
         }

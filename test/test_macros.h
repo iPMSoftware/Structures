@@ -11,6 +11,13 @@
         return false; \
     }
 
+#define ASSERT_NO_PASS_RETURN(x,y) if(x == y) { \
+        std::cout << "test " << __func__ << " PASS STEP" << x << " = " << #y << std::endl; \
+    } else { \
+        std::cout << "test " << __func__ << " FAIL " << x << " != " << #y << std::endl; \
+        return false; \
+    }    
+
 #define PREPARE_COLLECT bool result = false;int counter_positive = 0;int counter_negative = 0;
 
 #define COLLECT_RESULTS(x) { \

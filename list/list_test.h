@@ -6,7 +6,13 @@ namespace ipm {
         public:
         static void RunAll();
         static bool IsEmptyAfterCreate();
-        static bool IsSizeEqualToOneAfterPush();
+        static bool IsSizeEqualToOneAfterPushFront();
+        static bool IsValueCorrectAfterPushFront();
+        static bool IsSizeEqualToOneAfterPushBack();
+        static bool IsValueCorrectAfterPushBack();
+        static bool IsSizeEqualToTwoAfterPushBackAndPushFront();
+        static bool AreValuesCorrectAfterPushBackAndPushFront();
+        static bool AreValuesCorrectAfterPushFrontAndPushBack();
     };
 };
 
