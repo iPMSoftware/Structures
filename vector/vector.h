@@ -9,6 +9,7 @@ namespace ipm {
         vector() {
             size_ = 4;
             buff_ = new T[size_];
+            pos_ = 0;
         }
         void  push_back(T item) {
             if (pos_ == size_) {
@@ -25,6 +26,9 @@ namespace ipm {
         }
         T& operator[](int pos) {
             return buff_[pos];
+        }
+        void clear() {
+            pos_ = 0;
         }
 
         private:
