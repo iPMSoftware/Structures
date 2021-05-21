@@ -2,40 +2,9 @@
 #define IPM_MAP
 
 #include "../vector/vector.h"
+#include "hash.h"
 
-#include <string>
-
-namespace ipm {
-    template<typename T, int SIZE>
-    struct hash {
-        static unsigned long cal(const T item) {
-            const int MOD = 1000000007;
-            unsigned long h = 0;
-            const int size = sizeof(T);
-            const unsigned char* ptr = reinterpret_cast<const unsigned char*>(&item);
-            for(int i = 0;i<size;i++) {
-                h *= 127;
-                h += ptr[i];
-            }
-            return (MOD + h % MOD)%SIZE;
-        }
-    };
-
-    template<int SIZE>
-    struct hash<std::string,SIZE> {
-        static unsigned long cal(const std::string item)  {
-            const int MOD = 1000000007;
-            unsigned long h = 0;
-            const int size = item.length();
-            const unsigned char* ptr = reinterpret_cast<const unsigned char*>(item.data());
-            for(int i = 0;i<size;i++) {
-                h *= 127;
-                h += ptr[i];
-            }
-            return (MOD + h % MOD)%SIZE;
-        }
-    };
-
+namespace ipm {   
     template<typename Key, typename Value, int Size = 1000>
     class Map {
         public:
@@ -49,7 +18,7 @@ namespace ipm {
             return size_;
         }
         void put(const Key& key, const Value& value) {
-            auto index = ipm::hash<Key,Size>::cal(key);
+            auto index = ipm::hash<Key,Size>::calculate(key);
             int bucket_index = -1;
             for(int i=0;i<buffer_[index].size();i++) {
                 if (buffer_[index][i].key_ == key) {
@@ -58,16 +27,14 @@ namespace ipm {
                 }
             }
             if(bucket_index != -1) {
-                buffer_[index][bucket_index] = bucket{key, value};
-                return true;
+                buffer_[index][bucket_index].value_ = value;
             }
             size_++;
             buffer_[index].push_back(bucket{key,value});
-            return true;
         }
 
         Value get(const Key& key) const {
-            auto index = ipm::hash<Key,Size>::cal(key);
+            auto index = ipm::hash<Key,Size>::calculate(key);
             for(int i=0;i<buffer_[index].size();i++) {
                 if (buffer_[index][i].key_ == key) {
                     return buffer_[index][i].value_;
@@ -82,7 +49,7 @@ namespace ipm {
             }
         }
         bool remove(const Key& key) {
-            auto index = ipm::hash<Key,Size>::cal(key);
+            auto index = ipm::hash<Key,Size>::calculate(key);
             for(int i=0;i<buffer_[index].size();i++) {
                 if (buffer_[index][i].key_ == key) {
                     buffer_[index].erase(buffer_[index].begin()+i);
