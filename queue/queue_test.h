@@ -7,7 +7,7 @@ namespace ipm {
         static void RunAll();
         static bool IsEmptyAfterCreate();
         static bool IsSizeEqualToOneAfterPush();
-        static bool IsEmptyAfterPushAndPopFront();
+        static bool IsEmptyAfterPushAndPop();
         static bool IsValuePopFrontEqualToOnePushed();
         static bool IsMoreElementsAddedCorrectly();
     };

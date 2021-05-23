@@ -24,12 +24,15 @@ namespace ipm {
             data_[back_++] = elem;
         }
 
-        T pop_front() {
+        T front() {
             if(back_ == front_)
                 return T{};
-            T val = data_[front_++];
+            T val = data_[front_];
 
             return val;
+        }
+        void pop() {
+            front_++;
         }
         int size() const {
             return back_ - front_;

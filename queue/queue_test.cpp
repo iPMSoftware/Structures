@@ -9,7 +9,7 @@ namespace ipm {
         PREPARE_COLLECT
         COLLECT_RESULTS(IsEmptyAfterCreate())
         COLLECT_RESULTS(IsSizeEqualToOneAfterPush())
-        COLLECT_RESULTS(IsEmptyAfterPushAndPopFront())
+        COLLECT_RESULTS(IsEmptyAfterPushAndPop())
         COLLECT_RESULTS(IsValuePopFrontEqualToOnePushed())
         COLLECT_RESULTS(IsMoreElementsAddedCorrectly())
         PRINT_RESULTS
@@ -26,17 +26,17 @@ namespace ipm {
         ASSERT(1,q.size());
     }
 
-    bool QueueTest::IsEmptyAfterPushAndPopFront() {
+    bool QueueTest::IsEmptyAfterPushAndPop() {
         ipm::Queue<int> q;
         q.push(1);
-        q.pop_front();
+        q.pop();
         ASSERT(0,q.size());
     }
 
     bool QueueTest::IsValuePopFrontEqualToOnePushed() {
         ipm::Queue<int> q;
         q.push(1);
-        int x = q.pop_front();
+        int x = q.front();
         ASSERT(x,1);
     }
 
