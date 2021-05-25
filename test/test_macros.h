@@ -4,17 +4,17 @@
 #include <iostream>
 
 #define ASSERT(x,y) if(x == y) { \
-        std::cout << "PASS " << __func__ << " " << x << " = " << #y << std::endl; \
+        std::cout << "PASS " << __func__ << std::endl; \
         return true; \
     } else { \
-        std::cout << "FAIL " << __func__ << " " << x << " != " << #y << std::endl; \
+        std::cout << "FAIL " << __func__ << " " << x << " != " << y << std::endl; \
         return false; \
     }
 
 #define ASSERT_NO_PASS_RETURN(x,y) if(x == y) { \
-        std::cout << "PASS STEP" << __func__ << " " << x << " = " << #y << std::endl; \
+        std::cout << "PASS STEP" << __func__ << std::endl; \
     } else { \
-        std::cout << "FAIL " << __func__ << " " << x << " != " << #y << std::endl; \
+        std::cout << "FAIL " << __func__ << " " << x << " != " << y << std::endl; \
         return false; \
     }    
 
