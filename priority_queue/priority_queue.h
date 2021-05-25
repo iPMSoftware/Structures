@@ -3,12 +3,15 @@
 
 #include "../queue/queue.h"
 
+#include <string>
+
+#include "lesser.h"
 #include "greater.h"
 #include "priority_queue_impl.h"
 
 namespace ipm {
     
-    template<typename T, typename IMPL = ipm::PriorityQueueImpl<T,ipm::greater<T>>>
+    template<typename T, typename COMP = ipm::greater<T>, typename IMPL = ipm::PriorityQueueImpl<T,COMP>>
     class PriorityQueue {
         public:
         PriorityQueue() {}
@@ -24,6 +27,9 @@ namespace ipm {
         }
         int size() const {
             return impl_.size();
+        }
+        std::string to_string()  {
+            return impl_.to_string();
         }
 
         private:
