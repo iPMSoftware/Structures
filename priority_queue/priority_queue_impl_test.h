@@ -1,8 +1,8 @@
-#ifndef IPM_PRIORITY_QUEUE_TEST
-#define IPM_PRIORITY_QUEUE_TEST
+#ifndef IPM_PRIORITY_QUEUE_IMPL_TEST
+#define IPM_PRIORITY_QUEUE_IMPL_TEST
 
 namespace ipm {
-    class PriorityQueueTest {
+    class PriorityQueueImplTest {
         public:
         static void RunAll();
         static bool IsEmptyAfterCreate();

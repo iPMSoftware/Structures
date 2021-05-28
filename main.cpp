@@ -4,7 +4,8 @@
 #include "list/list_test.h"
 #include "map/map_test.h"
 #include "sort/merge_sort_test.h"
-#include "priority_queue/priority_queue_test.h"
+#include "priority_queue/priority_queue_impl_test.h"
+#include "priority_queue/priority_queue_heap_test.h"
 
 #include <string>
 #include <iostream>
@@ -17,6 +18,7 @@ int main() {
     ipm::ListTest::RunAll();
     ipm::MapTest::RunAll();
     ipm::MergeSortTest::RunAll();
-    ipm::PriorityQueueTest::RunAll();
+    ipm::PriorityQueueImplTest::RunAll();
+    ipm::PriorityQueueHeapTest::RunAll();
     return 0;
 }
