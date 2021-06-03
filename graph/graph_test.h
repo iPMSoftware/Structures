@@ -6,6 +6,13 @@ namespace ipm {
         public:
         static void RunAll();
         static bool IsEmptyAfterCreate();
+        static bool IsVertexPresentAfterInsertion();
+        static bool IsVertexNotPresentAfterDelete();
+        static bool CheckEdgeIsPresentAfterVertexInsertion();
+        static bool CheckEdgeIsPresentWithoutVertexInsertion();
+        static bool CheckEdgeIsPresentAfterOneVertexInsertion();
+        static bool CheckDeleteOfExistingEdge();
+        static bool CheckDeleteOfNonExistingEdge();
     };
 };
 

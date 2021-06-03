@@ -5,37 +5,63 @@
 
 namespace ipm {
 
-    template<typename T, int SIZE = 100>
+    constexpr const int GRAPH_NORMAL = 0;
+    constexpr const int GRAPH_DIRECTED = 1;
+
+    template<typename T, int TYPE = GRAPH_NORMAL, int SIZE = 100>
     class graph_2d {
         public:
         bool add_vertex(T vertex) {
-            if(!has_vertex(vertex))
+            if(has_vertex(vertex))
                 return false;
-            map_.put(vertex,size_++);
+            map_.put(vertex,vertex_index{vertex_count_++});
+            return true;
+        }
+        bool delete_vertex(T vertex) {
+            if(has_vertex(vertex))
+                return false;
+            map_.remove(vertex);
+            auto vertex_id = map_.get(vertex).val_;
+            for(int i = 0;i<SIZE;i++) {
+                if(has_edge(vertex_id,i)) {
+                    edge_count_--;
+                    tab_[vertex_id][i] = false;
+                    if(TYPE == GRAPH_NORMAL)
+                        tab_[i][vertex_id] = false;
+                }
+            }
+            vertex_count_--;
             return true;
         }
         bool add_edge(T vertex1, T vertex2) {
-            if (bool hv = has_vertexes(vertex1,vertex2))
+            if (!has_vertexes(vertex1,vertex2))
                 return false;
             auto vertex1_id = map_.get(vertex1).val_;
             auto vertex2_id = map_.get(vertex2).val_;
             tab_[vertex1_id][vertex2_id] = true;
-            size_++;
+            if(TYPE == GRAPH_NORMAL) 
+                tab_[vertex2_id][vertex1_id] = true;
+            edge_count_++;
             return true;
         }
         bool delete_edge(T vertex1, T vertex2) {
-            if(size_ == 0)
+            if(edge_count_ == 0)
                 return false;
-            if(bool he = has_edge(vertex1,vertex2))
+            if(!has_edge(vertex1,vertex2))
                 return false;
             auto vertex1_id = map_.get(vertex1).val_;
             auto vertex2_id = map_.get(vertex2).val_;
             tab_[vertex1_id][vertex2_id] = false;
+            if(TYPE == GRAPH_NORMAL)
+                tab_[vertex2_id][vertex1_id] = false;
+            edge_count_--;
             return true;
         }
-
-        int size() const {
-            return size_;
+        int vertexes() const {
+            return vertex_count_;
+        }
+        int edges() const {
+            return edge_count_;
         }
         private:
         struct vertex_index {
@@ -66,22 +92,24 @@ namespace ipm {
         }
         bool has_vertex(T vertex) {
             int vertex_id = map_.get(vertex).val_;
-            if(vertex_id == edge_indexes::kNoVertex)
-                return false;
-            return true;
+            return (vertex_id == vertex_index::kNoVertex ? false : true);
         }
 
         bool tab_[SIZE][SIZE];
         ipm::Map<T,vertex_index,SIZE> map_;
-        int size_{0};
+        int edge_count_{0};
+        int vertex_count_{0};
     };
 
-    template<typename T, typename IMPL = ipm::graph_2d<T>>
+    template<typename T, int TYPE = GRAPH_NORMAL, typename IMPL = ipm::graph_2d<T,TYPE>>
     class graph {
         public:
         graph() = default;
         bool add_vertex(T vertex) {
             return impl_.add_vertex(vertex);
+        }
+        bool delete_vertex(T vertex) {
+            return impl_.delete_vertex(vertex);
         }
         bool add_edge(T vertex1, T vertex2) {
             return impl_.add_edge(vertex1,vertex2);
@@ -89,10 +117,11 @@ namespace ipm {
         bool delete_edge(T vertex1, T vertex2) {
             return impl_.delete_edge(vertex1,vertex2);
         }
-
-
-        int size() const {
-            return impl_.size();
+        int vertexes() const {
+            return impl_.vertexes();
+        }
+        int edges() const {
+            return impl_.edges();
         }
 
         
