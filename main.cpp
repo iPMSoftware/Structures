@@ -7,6 +7,7 @@
 #include "priority_queue/priority_queue_impl_test.h"
 #include "priority_queue/priority_queue_heap_test.h"
 #include "graph/graph_test.h"
+#include "bidirectional_list/bidirectional_list_test.h"
 
 #include <string>
 #include <iostream>
@@ -22,5 +23,6 @@ int main() {
     ipm::PriorityQueueImplTest::RunAll();
     ipm::PriorityQueueHeapTest::RunAll();
     ipm::GraphTest::RunAll();
+    ipm::BidirectionalListTest::RunAll();
     return 0;
 }
