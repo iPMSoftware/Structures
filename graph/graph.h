@@ -1,6 +1,7 @@
-#ifndef IPM_LIST
-#define IPM_LIST
+#ifndef IPM_GRAPH
+#define IPM_GRAPH
 
+#include "../bidirectional_list/bidirectional_list.h"
 #include "../map/map.h"
 
 namespace ipm {
@@ -8,6 +9,91 @@ namespace ipm {
     constexpr const int GRAPH_NORMAL = 0;
     constexpr const int GRAPH_DIRECTED = 1;
 
+
+    template<typename T, int TYPE = GRAPH_NORMAL, int SIZE = 100>
+    class graph_list {
+        public:
+        bool add_vertex(T vertex) {
+            if(has_vertex(vertex))
+                return false;
+            map_.put(vertex,vertex_index{vertex_count_++});
+            return true;
+        }
+        bool delete_vertex(T vertex) {
+            if(has_vertex(vertex))
+                return false;
+            map_.remove(vertex);
+            auto vertex_id = map_.get(vertex).val_;
+            for(int i = 0;i<SIZE;i++) {
+                if(has_edge(vertex_id,i)) {
+                    edge_count_--;
+                    list_[vertex_id].erase(vertex);
+                    if(TYPE == GRAPH_NORMAL)
+                        list_[i].erase(vertex_id);
+                }
+            }
+            vertex_count_--;
+            return true;
+        }
+        bool add_edge(T vertex1, T vertex2) {
+            if (!has_vertexes(vertex1,vertex2))
+                return false;
+            auto vertex1_id = map_.get(vertex1).val_;
+            auto vertex2_id = map_.get(vertex2).val_;
+            list_[vertex1_id].push(vertex2_id);
+            if(TYPE == GRAPH_NORMAL) 
+                list_[vertex2_id].push(vertex1_id);
+            edge_count_++;
+            return true;
+        }
+        bool delete_edge(T vertex1, T vertex2) {
+            if(edge_count_ == 0)
+                return false;
+            if(!has_edge(vertex1,vertex2))
+                return false;
+            auto vertex1_id = map_.get(vertex1).val_;
+            auto vertex2_id = map_.get(vertex2).val_;
+            list_[vertex1_id].erase(vertex2_id);
+            if(TYPE == GRAPH_NORMAL)
+                list_[vertex2_id].erase(vertex1_id);
+            edge_count_--;
+            return true;
+        }
+        int vertexes() const {
+            return vertex_count_;
+        }
+        int edges() const {
+            return edge_count_;
+        }
+        private:
+        struct vertex_index {
+            static constexpr int kNoVertex {-1};
+            int val_ {-1};
+
+        };
+        bool has_edge(T vertex1, T vertex2) {
+            if(!has_vertexes(vertex1,vertex2))
+                return false;
+            auto vertex1_id = map_.get(vertex1).val_;
+            auto vertex2_id = map_.get(vertex2).val_;
+            return list_[vertex1_id].has_value(vertex2_id);
+        }
+        bool has_vertexes(T vertex1, T vertex2) {
+            if(!has_vertex(vertex1))
+                return false;
+            if(!has_vertex(vertex2))
+                return false;
+            return true;
+        }
+        bool has_vertex(T vertex) {
+            int vertex_id = map_.get(vertex).val_;
+            return (vertex_id == vertex_index::kNoVertex ? false : true);
+        }
+        ipm::bidirectional_list<T> list_[SIZE];
+        ipm::Map<T,vertex_index,SIZE> map_;
+        int edge_count_{0};
+        int vertex_count_{0};
+    };
     template<typename T, int TYPE = GRAPH_NORMAL, int SIZE = 100>
     class graph_2d {
         public:
@@ -86,7 +172,7 @@ namespace ipm {
         bool has_vertexes(T vertex1, T vertex2) {
             if(!has_vertex(vertex1))
                 return false;
-            if(!has_vertex(vertex1))
+            if(!has_vertex(vertex2))
                 return false;
             return true;
         }
@@ -101,7 +187,7 @@ namespace ipm {
         int vertex_count_{0};
     };
 
-    template<typename T, int TYPE = GRAPH_NORMAL, typename IMPL = ipm::graph_2d<T,TYPE>>
+    template<typename T, int TYPE = GRAPH_NORMAL, typename IMPL = ipm::graph_list<T,TYPE>>
     class graph {
         public:
         graph() = default;

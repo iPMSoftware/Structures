@@ -56,7 +56,7 @@ namespace ipm {
         ipm::graph<int> g;
         g.add_vertex(1);
         bool add_edge = g.add_edge(1,2);
-        ASSERT(add_edge,true)        
+        ASSERT(add_edge,false)        
     }
 
     bool GraphTest::CheckDeleteOfExistingEdge() {
